@@ -1,31 +1,236 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@using BugTracker.Helpers
+
+<!DOCTYPE html>
+<style type="text/css">
+    .modal-content iframe {
+        margin: 0 auto;
+        display: block;
+    }
+</style>
+
+<!--[if IE 9 ]><html class="ie9"><![endif]-->
+<!--Cut from index and put in layout Below-->
+<!--Cut from index and put in layout Above-->
+<!-- Content -->
+<!--Frome here up to layout???-->
+<!--Leave this in Index-->
+<!-- Pies -->
+@{
+    var ticketHelper = new TicketsHelper();
+}
+<div class="tile text-center">
+    <div class="tile-dark p-15">
+        <h4>All Project(s) Open Ticket Priorities</h4>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetOpenTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open Tickets</span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetCriticalTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/Critical</span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetHigherTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/Higher</span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetHighTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/High</span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetMediumTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/Medium</span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetLowTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/Low</span>
+        </div>
+    </div>
+</div>
+
+
+<hr class="whiter" />
+<div class="col-md-12 text-center">
+    <h1>Welcome to Error Management Systems</h1>
+    <div class="row">
+        <button id="instructions" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">View/Download Instructions</button>
+    </div>
+    <div class="row">
+        <button id="VideoTutorial" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#tutorial">View Tutorial Video</button>
+    </div>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <h3>No Data To Display-Please log in.</h3>
+    }
+</div>
+
+<hr class="whiter p-15" />
+<h2 class="center">Getting Started - EMS Screenshots</h2>
+<div class="container">
+    <div class="col-md-12 tbmargin border">
+        <div class="col-md-6 ">
+            <img src="~/Assets/images/DashBoard/AdminNav.png" class="img-responsive" />
+        </div>
+        <div class="col-md-6 ">
+            <img src="~/Assets/images/DashBoard/UserNav.png" class="img-responsive" />
+        </div>
+    </div>
+
+    <hr class="whiter" />
+
+    <div class="col-md-12 tbmargin border">
+        <div class="col-md-6">
+            <img src="~/Assets/images/DashBoard/TopandSideNav.png" class="img-responsive" />
+        </div>
+        <div class="col-md-6">
+            <img src="~/Assets/images/DashBoard/UserListScreenShot.png" class="img-responsive" />
+        </div>
+    </div>
+
+    <hr class="whiter" />
+
+    <div class="col-md-12 tbmargin border">
+        <div class="col-md-6">
+            <img src="~/Assets/images/DashBoard/AddDemoData.png" class="img-responsive" />
+        </div>
+        <div class="col-md-6">
+            <img src="~/Assets/images/DashBoard/MainDashboard.png" class="img-responsive" />
+        </div>
+    </div>
+
+
+</div>
+
+<!-- Instructions Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg custom-modal">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title">EMS Instructions</h2>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid scroll">
+                    <div class="row">
+
+                        <div class="custom-pad" id="resume">
+                            <object width="850" height="1150" data="/Assets/attachments/EMS Instructions.pdf"></object>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="tutorial" role="dialog">
+    <div class="modal-dialog modal-lg custom-modal">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title">EMS Tutorial</h2>
+            </div>
+            <div class="modal-body">
+                <iframe id="tutorialVideo" width="600px" src="//www.youtube.com/embed/ebcSZz3bqiY" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Video tutorial modal-->
+@*</section>*@
+<!-- Older IE Message -->
+<!--[if lt IE 9]>
+    <div class="ie-block">
+        <h1 class="Ops">Ooops!</h1>
+        <p>You are using an outdated version of Internet Explorer, upgrade to any of the following web browser in order to access the maximum functionality of this website. </p>
+        <ul class="browsers">
+            <li>
+                <a href="https://www.google.com/intl/en/chrome/browser/">
+                    <image src="image/browsers/chrome.png" alt="">
+                    <div>Google Chrome</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://www.mozilla.org/en-US/firefox/new/">
+                    <image src="image/browsers/firefox.png" alt="">
+                    <div>Mozilla Firefox</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://www.opera.com/computer/windows">
+                    <image src="image/browsers/opera.png" alt="">
+                    <div>Opera</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://safari.en.softonic.com/">
+                    <image src="image/browsers/safari.png" alt="">
+                    <div>Safari</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/downloads/ie-10/worldwide-languages">
+                    <image src="image/browsers/ie.png" alt="">
+                    <div>Internet Explorer(New)</div>
+                </a>
+            </li>
+        </ul>
+        <p>Upgrade your browser for a Safer and Faster web experience. <br/>Thank you for your patience...</p>
+    </div>
+<![endif]-->
+@*</section>*@
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            /* Get iframe src attribute value i.e. YouTube video url
+
+            and store it in a variable */
+
+            var url = $("#tutorialVideo").attr('src');
+
+
+
+            /* Assign empty url value to the iframe src attribute when
+
+            modal hide, which stop the video playing */
+
+            $("#tutorial").on('hide.bs.modal', function () {
+
+                $("#tutorialVideo").attr('src', '');
+
+            });
+
+
+
+            /* Assign the initially stored url back to the iframe src
+
+            attribute when modal is displayed again */
+
+            $("#myModal").on('show.bs.modal', function () {
+
+                $("#cartoonVideo").attr('src', url);
+
+            });
+
+        });
+
+    </script>
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+

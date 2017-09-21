@@ -1,0 +1,126 @@
+﻿@using BugTracker.Helpers
+
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie9"><![endif]-->
+<!--Cut from index and put in layout Below-->
+<!--Cut from index and put in layout Above-->
+<!-- Content -->
+<!--Frome here up to layout???-->
+<!--Leave this in Index-->
+<!-- Pies -->
+@{
+    var ticketHelper = new TicketsHelper();
+}
+<div class="tile text-center">
+    <div class="tile-dark p-15">
+        <h4>All Project(s) Open Ticket Priorities</h4>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetOpenTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open Tickets<i class="m-l-5 fa fa-retweet"></i></span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetCriticalTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/Critical<i class="m-l-5 fa fa-retweet"></i></span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetHigherTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/Higher<i class="m-l-5 fa fa-retweet"></i></span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetHighTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/High<i class="m-l-5 fa fa-retweet"></i></span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetMediumTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/Medium<i class="m-l-5 fa fa-retweet"></i></span>
+        </div>
+        <div class="pie-chart-tiny" data-percent=@ticketHelper.GetLowTickets()>
+            <span class="percent"></span>
+            <span class="pie-title">Open/Low<i class="m-l-5 fa fa-retweet"></i></span>
+        </div>
+    </div>
+</div>
+
+
+<hr class="whiter" />
+<div class="col-md-12">
+    <h1 class="center">Admin Master Index</h1>
+</div>
+
+<div class="col-md-12">
+
+    <hr class="whiter" />
+    <div class="col-md-offset-1 col-md-10 p-15">
+        <h3 class="center">Projects Index</h3>
+    </div>
+    
+
+    <div class="col-md-offset-1 col-md-10 fixed p-10">
+        @{Html.RenderAction("_PartialAdminProjects", "Projects");}
+    </div>  
+
+    <div class="col-md-offset-1 col-md-10 p-15">
+        <h3 class="center">Tickets Index</h3>
+    </div>
+
+
+    <div class="col-md-offset-1 col-md-10 fixed p-10">
+
+        @{Html.RenderAction("_PartialAdminTickets", "Tickets");}
+    </div>
+
+    <div class="col-md-offset-1 col-md-10 p-15">
+        <h3 class="center">Notifications Index</h3>
+    </div>
+
+    <div class="col-md-offset-1 col-md-10 fixed p-10">
+
+        @{Html.RenderAction("_PartialAdminNotifications", "TicketNotifications");}
+    </div>
+</div>
+<!-- Main Widgets -->
+<!-- Older IE Message -->
+<!--[if lt IE 9]>
+    <div class="ie-block">
+        <h1 class="Ops">Ooops!</h1>
+        <p>You are using an outdated version of Internet Explorer, upgrade to any of the following web browser in order to access the maximum functionality of this website. </p>
+        <ul class="browsers">
+            <li>
+                <a href="https://www.google.com/intl/en/chrome/browser/">
+                    <image src="image/browsers/chrome.png" alt="">
+                    <div>Google Chrome</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://www.mozilla.org/en-US/firefox/new/">
+                    <image src="image/browsers/firefox.png" alt="">
+                    <div>Mozilla Firefox</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://www.opera.com/computer/windows">
+                    <image src="image/browsers/opera.png" alt="">
+                    <div>Opera</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://safari.en.softonic.com/">
+                    <image src="image/browsers/safari.png" alt="">
+                    <div>Safari</div>
+                </a>
+            </li>
+            <li>
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/downloads/ie-10/worldwide-languages">
+                    <image src="image/browsers/ie.png" alt="">
+                    <div>Internet Explorer(New)</div>
+                </a>
+            </li>
+        </ul>
+        <p>Upgrade your browser for a Safer and Faster web experience. <br/>Thank you for your patience...</p>
+    </div>
+<![endif]-->
+@*</section>*@
+
+
+
+

@@ -1,0 +1,110 @@
+﻿@model BugTracker.Models.Project
+@using BugTracker.Helpers
+
+@{
+    ViewBag.Title = "Details";
+}
+<div class="container">
+    <div class="col-md-offset-3 col-md-5 tile p-15">
+        <h2 class="center">Project Details</h2>
+
+        <div>
+
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dt>
+                    @Html.DisplayName("Project Users")
+                </dt>
+
+                <dd>
+                    @{
+                        var projectHelper = new ProjectsHelper();
+                        var userHelper = new UserRolesHelper();
+                        var validator = new AccessValidator();
+                        var userFlag = ViewBag.UserIndexFlag;
+
+                        foreach (var user in projectHelper.UsersOnProject(Model.Id))
+                        {
+
+                            <h4>@user.DisplayName</h4>
+
+                                <h5> Roles Held:</h5>
+                                <ul>
+                                    @foreach (var role in userHelper.ListUserRoles(user.Id))
+                                    {
+                                        <li>@role</li>
+                                    }
+                                </ul>
+
+                        }
+
+                    }
+                </dd>
+                <dt>
+                    @Html.DisplayName("Project Tickets")
+                </dt>
+                <dd>
+                    <ul>
+                        @{ var count = 0;}
+                    @foreach (var ticket in Model.Tickets)
+                    {
+                        count++;
+                        userFlag = ViewBag.UserIndexFlag;
+
+                        <li>@Html.ActionLink(ticket.Title, "Details", "Tickets", new { id = ticket.Id, flag = userFlag }, null)</li>
+                    }
+                    @if (count == 0)
+                    {
+                        <li>No Tickets to Display</li>
+                    }
+                </ul>
+
+            </dd>
+        </dl>
+    </div>
+    <p>
+
+
+        @if ((User.IsInRole("Admin") || validator.PMProject(Model.Id)) && !Model.Archived)
+            {
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+        }
+
+        @if (validator.ProjectSubmitter(Model.Id))
+            {
+
+        <p>
+            @Html.ActionLink("Create New Ticket", "Create", "Tickets", new { projectId = Model.Id }, null)
+        </p>
+        }
+        <p>
+            @{
+
+                if (userFlag)
+                {
+                    @Html.ActionLink("Back to List", "UserIndex");
+            }
+            else
+            {
+                    @Html.ActionLink("Back to List", "Index");
+            }
+            }
+
+        </p>
+    </div>
+</div>
+

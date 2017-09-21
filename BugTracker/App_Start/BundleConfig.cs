@@ -21,11 +21,15 @@ namespace BugTracker
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                   "~/Assets/js/bootstrap-multiselect.js",
+                   "~/Assets/js/BugTracker.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Assets/css/bootstrap-multiselect.css",
+                      "~/Assets/css/Custom.css"));
         }
     }
 }

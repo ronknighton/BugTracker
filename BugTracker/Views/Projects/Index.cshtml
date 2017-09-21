@@ -1,0 +1,138 @@
+﻿@model IEnumerable<BugTracker.Models.Project>
+@using BugTracker.Helpers
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container">
+    <div class="col-md-12">
+        <h2>Projects Index</h2>
+        @{
+            var count = 0;
+            var ticketCount = 0;
+        }
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+        {
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+        }
+
+
+        <table id="myTable" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Project Users")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Project Tickets")
+                    </th>
+                    <th>Is Archived</th>
+                    <th>Project Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                count++;
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            <div>
+                                @{
+                                    var projectHelper = new ProjectsHelper();
+                                    <ul>
+                                        @foreach (var user in projectHelper.UsersOnProject(item.Id))
+                                        {
+                                            <li>@user.DisplayName</li>
+                                        }
+                                    </ul>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <ul>
+                                    @{
+                                        var userFlag = ViewBag.UserIndexFlag;
+                                        var val = new AccessValidator();
+
+                                    }
+                                    @foreach (var ticket in item.Tickets)
+                                    {
+                                        ticketCount++;
+                                        if (User.IsInRole("Admin") || val.DevProjectTicket(ticket.Id) || val.TicketOwner(ticket.Id) || val.PMProjectTicket(ticket.Id))
+                                        {
+                                            <li>@Html.ActionLink(ticket.Title, "Details", "Tickets", new { id = ticket.Id, flag = userFlag }, null)- Status: @ticket.TicketStatus.Name</li>
+                                        }
+
+
+                                    }
+                                </ul>
+                            </div>
+
+                        </td>
+                        <td>
+                            @if (item.Archived)
+                            {
+                                <h5 class="text-danger">Archived</h5>
+                            }
+                            else
+                            {
+                                <h5 class="text-warning">Active</h5>
+                            }
+                        </td>
+                        <td>
+
+
+
+
+                            @if (User.IsInRole("Admin") || val.PMProject(item.Id))
+                              {
+                                @Html.ActionLink("Project Details", "Details", new { id = item.Id, flag = userFlag }, new { @class = "btn btn-info btn-sm" })<br />
+                                if (!item.Archived)
+                                {
+                                @Html.ActionLink("Edit/Assign Users", "Edit", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })<br />
+                                @Html.ActionLink("Archive Project", "Delete", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })<br />
+                                }
+                                if (item.Archived)
+                                {
+                                @Html.ActionLink("UnArchive Project", "UnArchive", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+                                }
+                            }
+                           
+
+                            @if (val.ProjectSubmitter(item.Id))
+                           {
+
+                              <br />  @Html.ActionLink("Create New Ticket", "Create", "Tickets", new { projectId = item.Id, flag = userFlag }, new { @class = "btn btn-info btn-sm" })
+
+                            }
+
+                        </td>
+                    </tr>
+                 }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+@{
+    if (count == 0)
+    {
+        <h3>You have no projects to display.</h3>
+    }
+
+}

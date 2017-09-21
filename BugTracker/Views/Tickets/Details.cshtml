@@ -1,0 +1,340 @@
+﻿@model BugTracker.Models.Ticket
+@using BugTracker.Helpers
+@using Microsoft.AspNet.Identity;
+
+@{
+    ViewBag.Title = "Ticket Details";
+}
+<div class="container ">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6 tile p-15">            
+                <h2 class="center">Ticket Details</h2>
+            <div class="col-md-offset-2 col-md-8 p-15">
+              
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayName("Ticket Title:")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Title)
+                        </dd>
+                        <dt>
+                            @Html.DisplayName("Project Name:")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Project.Name)
+                        </dd>
+                        <dt>
+                            @Html.DisplayName("Assigned To:")
+                        </dt>
+                        <dd>
+                            @if (Model.AssignedToUserId == null)
+                            {
+                                @Html.DisplayName("No User Assigned")
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.AssignedToUser.DisplayName)
+                            }
+                        </dd>
+                        <dt>
+                            @Html.DisplayName("Ticket Owner:")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.OwnerUser.DisplayName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayName("Ticket Priority:")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.TicketPriority.Name)
+                        </dd>
+                        <dt>
+                            @Html.DisplayName("Ticket Status:")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.TicketStatus.Name)
+                        </dd>
+                        <dt>
+                            @Html.DisplayName("Ticket Type:")
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.TicketType.Name)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Created)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Created)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Updated)
+                        </dt>
+
+                        <dd>
+                            @if (Model.Updated == null)
+                            {
+                                @Html.DisplayName("Has Not Been Updated")
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.Updated)
+                            }
+
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Archived)
+                        </dt>
+
+                        <dd>
+                            @if (Model.Archived)
+                            {
+                                <span class="text-danger">Archived</span>
+                            }
+                            else
+                            {
+                                <span class="text-warning">Active</span>
+                            }
+                        </dd>
+
+                    </dl>
+                </div>
+                <div class="col-md-offset-2 col-md-8 center">
+                    @{
+                        var ticketsHelper = new TicketsHelper();
+                        var projectHelper = new ProjectsHelper();
+                        var validator = new AccessValidator();
+                        var userHelper = new UserHelper();
+                        var userId = User.Identity.GetUserId();
+                        var isDevTicket = validator.DevProjectTicket(Model.Id);
+                        var isPMTicket = validator.PMProjectTicket(Model.Id);
+                        var isTicketOwner = validator.TicketOwner(Model.Id);
+                        var isTicketAssigned = validator.DevTicketAssigned(Model.Id);
+
+                    }
+
+                    @if ((User.IsInRole("Admin") || isPMTicket) && !Model.Archived)
+            {
+                        @Html.ActionLink(" Edit/Assign", "Edit", "Tickets", new { id = Model.Id, flag = ViewBag.UserIndexFlag }, new { @class = "btn btn-info btn-sm" })
+                    }
+                </div>
+            <div class="col-md-12">
+                <div class="p-15">
+                    @{
+                        var userFlag = ViewBag.UserIndexFlag;
+                        if (userFlag)
+                        {
+                            @Html.ActionLink("Back to List", "UserIndex");
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Back to List", "Index");
+                        }
+                    }
+                </div>
+            </div>
+
+        </div>
+       
+    </div>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6 tile p-15">
+
+
+
+            @if ((User.IsInRole("Admin") || isTicketAssigned || isPMTicket || isTicketOwner) && !Model.Archived)
+            {
+                using (Html.BeginForm("Create", "TicketComments", new { ticketId = Model.Id, attachDesc = "attachDesc", flag = ViewBag.UserIndexFlag }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h2 class="center">Leave a Comment</h2>
+                        <p class="center text-danger">HTML not allowed!</p>
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group p-15">
+                            @Html.Label("Comment Details", htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @*@Html.TextBox("Comment", new { htmlAttributes = new { @class = "form-control" } })*@
+                                @Html.TextArea("Comment", new { @class = "form-control" })
+                                <h4> @TempData["CommentError"]</h4>
+                                @*@Html.ValidationMessage("Comment", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+
+                    </div>
+                    <h2 class="center">Add an attahment</h2>
+                    <p class="center text-danger">HTML not allowed!</p>
+                    <div class="form-group p-15">
+                        @Html.Label("Attachment Description", htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            @Html.TextArea("attachDesc", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group p-15">
+                        @Html.Label("Add Attachment", htmlAttributes: new { @class = "control-label col-md-3" })
+                        <div class="col-md-9">
+                            <input name="attachment" type="file" class="form-control" id="fileUpload" />
+                            <h4> @TempData["FileError"]</h4>
+                            @*@Html.ValidationMessageFor(model => model.FileUrl, "", new { @class = "text-danger" })*@
+                        </div>
+                    </div>
+                    <div class="row center">
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Submit" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h1 class="center text-danger">Changes Not Allowed.</h1>
+            }
+
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6 tile p-15">
+            <div class="center">
+                <h2 class="center">Ticket Comments</h2>
+
+                <div id="customScroll" class="fixed-height">
+                    @foreach (var comment in ticketsHelper.TicketComments(Model.Id))
+                    {
+                        <div class="p-15">
+
+                            <p>
+                                <h3>Submitted by: @comment.User.DisplayName</h3>
+                                <h5>Submitted on: @comment.Created</h5>
+                                <h5>Comment: @comment.Comment</h5>
+
+                                @Html.ActionLink("View Comment ", "Details", "TicketComments", new { id = comment.Id, flag = ViewBag.UserIndexFlag }, null)
+                                @if ((User.IsInRole("Admin") || comment.UserId == userId || isPMTicket) && !Model.Archived)
+                                {
+                                    <span> | </span>@Html.ActionLink("Edit ", "Edit", "TicketComments", new { id = comment.Id, flag = ViewBag.UserIndexFlag }, null)
+
+                                }
+                            </p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6 tile p-15">
+            <div class="center">
+                <h2 class="center">Ticket Attachments</h2>
+                <div  id="customScroll"  class="fixed-height">
+                    @foreach (var attachment in ticketsHelper.TicketAttachments(Model.Id))
+                    {
+                        <div class="p-15">
+                            <p>
+                                <h3>Description: @attachment.Description</h3>
+                                <h5>Submitted by: @attachment.User.DisplayName</h5>
+                                <h5>Submitted on: @attachment.Created</h5>
+                                <h5>Submitted on: @attachment.MediaURL</h5>
+
+                                @Html.ActionLink("View Attachment ", "Details", "TicketAttachments", new { id = attachment.Id, flag = ViewBag.UserIndexFlag }, null)
+
+                                @{ var isAttachOwner = validator.AttachmentOwner(attachment.Id); }
+                                @if ((User.IsInRole("Admin") || isAttachOwner) && !Model.Archived)
+                                {
+                                    <span> | </span> @Html.ActionLink(" Edit ", "Edit", "TicketAttachments", new { id = attachment.Id, flag = ViewBag.UserIndexFlag }, null)
+
+                                }
+                            </p>
+                        </div>
+                                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-md-offset-3 col-md-6  tile p-15">
+            <h2 class="center">Ticket Histories</h2>
+            <div  id="customScroll" class="center fixed-height">
+
+
+                @foreach (var history in ticketsHelper.TicketHistories(Model.Id))
+                {
+                    <div class="p-15">
+                        <p>
+                            <h3>Changed By: @history.User.DisplayName</h3>
+                            <h5>Date Changed: @history.DateChanged</h5>
+                            <h5>Property: @history.Property</h5>
+                            <h5>Old Value: @history.OldValue</h5>
+                            <h5>New Value: @history.NewValue</h5>
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6 tile p-15">
+            <h2 class="center">Ticket Notifications</h2>
+            <div  id="customScroll" class="center fixed-height">
+
+                @foreach (var notification in ticketsHelper.TicketNotifications(Model.Id))
+                {
+                    <div class="p-15">
+                        <p>
+                            <h3>Person Notified: @notification.User.DisplayName</h3>
+                            <h5>Notification Date: @notification.Created</h5>
+                            <h5>Reason: @notification.NotifyReason</h5>
+                            <h5>Changed by: @userHelper.getUserDisplayName(notification.ChangedBy)</h5>
+                        </p>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // Get the modal
+        var modal = document.getElementById('myModal');
+        var modalImg = document.getElementById("img01");
+
+
+
+        function ImageClick(image) {
+            modal.style.display = "block";
+            modalImg = image;
+
+            //captionText.innerHTML = this.alt;
+        }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        var button = document.getElementsByClassName("btn.btn-default")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        button.click = function () {
+            modal.style.display = "none";
+        }
+    </script>
+}

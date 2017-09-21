@@ -1,40 +1,80 @@
 ﻿@model BugTracker.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "EMS User Registration";
 }
 
-<h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+<div class="container">
+    <div class="col-md-offset-3 col-md-6 tile p-15">
+        <h1 class="center"><img src="~/Assets/images/favicons/favicon-32x32.png" /> @ViewBag.Title</h1>
+        <div class="col-md-10 p-15">
+            <section>
+                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "Multipart/form-data" }))
+
+            //using (Html.BeginForm("Edit", "Tickets", new { flag = @ViewBag.UserIndexFlag }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
+            {
+                    @Html.AntiForgeryToken()
+
+
+
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.Label("First Name", new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.TextBox("FirstName", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Last Name", new { @class = "col-md-4 control-label" })
+                        <div class="col-md-8">
+                            @Html.TextBox("LastName", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                        <div class="form-group">
+                            @Html.Label("Display Name", new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                @Html.TextBox("DisplayName", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Add Attachment", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                <input name="image" type="file" class="form-control" id="fileUpload" />
+                                <h4> @TempData["FileError"]</h4>
+                                @*@Html.ValidationMessageFor(model => model.FileUrl, "", new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" class="btn btn-default" value="Register" />
+                            </div>
+                        </div>
+                }
+            </section>
         </div>
+
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
-        </div>
-    </div>
-}
+
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

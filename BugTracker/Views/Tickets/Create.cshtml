@@ -1,0 +1,102 @@
+﻿@model BugTracker.Models.Ticket
+
+@{
+    ViewBag.Title = "Create";
+}
+<div class="container">
+    <div class="col-md-offset-4 col-md-4 tile p-15">
+        <h2>Create Ticket for @ViewBag.ProjectName</h2>
+
+
+        @using (Html.BeginForm("Create", "Tickets", new { attachDesc = "attachDesc", flag = ViewBag.UserIndexFlag }, FormMethod.Post, new { enctype = "Multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Hidden("ProjectId", (object)ViewBag.ProjectId)
+
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TicketTypeId, "TicketTypeId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TicketTypeId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TicketPriorityId, "TicketPriorityId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TicketPriorityId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-horizontal">
+
+                    <h4>Create an initial comment</h4>
+                    <div class="form-group">
+                        @Html.Label("Comment Body", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextArea("cBody", new { @class = "form-control" })
+                            <h4>@TempData["CommentError"]</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Add an attahment</h4>
+                <div class="form-group">
+                    @Html.Label("Attachment Description", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBox("attachDesc", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Add Attachment", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input name="attachment" type="file" class="form-control" id="fileUpload" />
+                        <h4> @TempData["FileError"]</h4>
+                        @*@Html.ValidationMessageFor(model => model.FileUrl, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div>
+            @{
+                var userFlag = ViewBag.UserIndexFlag;
+                if (userFlag)
+                {
+                    @Html.ActionLink("Back to List", "UserIndex", "Projects");
+                }
+                else
+                {
+                    @Html.ActionLink("Back to List", "Index", "Projects");
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

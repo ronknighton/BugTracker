@@ -1,0 +1,155 @@
+﻿@model IEnumerable<BugTracker.Models.ApplicationUser>
+@using BugTracker.Helpers
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container">
+    <div class="col-md-12">
+        <h2>User Index</h2>
+
+        @*<p>
+                @Html.ActionLink("Create New", "Create")
+            </p>*@
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DisplayName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DisplayImage)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Projects")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Assigned Tickets")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Owned Tickets")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Roles")
+                    </th>
+                    <th>@Html.DisplayName("Options")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DisplayName)
+                        </td>                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @if (item.DisplayImage != null)
+                            {
+                                <img class="img-responsive max-width" src="@item.DisplayImage" />
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.DisplayImage)
+                            }
+
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.DisplayName)
+                        </td>*@
+                        <td>
+                            @{
+                                var projectHelper = new ProjectsHelper();
+                                var projectList = projectHelper.ListUserProjects(item.Id);
+                                var projectCount = 0;
+                                foreach (var project in projectList)
+                                {
+                                    projectCount++;
+                                }
+                                <p>@projectCount Project(s) Assigned</p>
+                                if (projectCount > 0 && User.IsInRole("Admin"))
+                                {
+                                    <a href="@Url.Action("AssignedProjects", "Projects", new { userId = item.Id})">See Projects</a>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var ticketsHelper = new TicketsHelper();
+                                var ticketList = ticketsHelper.AssignedTickets(item.Id);
+                                var assignedTicketCount = 0;
+                                var validator = new AccessValidator();
+                                    foreach (var ticket in ticketList)
+                                    {
+                                        assignedTicketCount++;
+                                    }
+                                <p>@assignedTicketCount Ticket(s) Assigned</p>
+                                if (assignedTicketCount > 0 && User.IsInRole("Admin"))
+                                {
+                                    <a href="@Url.Action("AssignedTickets", "Tickets", new { userId = item.Id})">See Tickets</a>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                //var ticketsHelper = new TicketsHelper();
+                                ticketList = ticketsHelper.OwnedTickets(item.Id);
+                                var ownedTicketCount = 0;
+                                foreach (var ticket in ticketList)
+                                {
+                                    ownedTicketCount++;
+                                }
+                                <p>@ownedTicketCount Ticket(s) Owned</p>
+                                if (ownedTicketCount > 0 && User.IsInRole("Admin"))
+                                {
+                                    <a href="@Url.Action("OwnedTickets", "Tickets", new { userId = item.Id})">See Tickets</a>
+                                }
+                            }
+
+                        </td>
+                        <td>
+                            @{
+                        var rolesHelper = new UserRolesHelper();
+                        var roleList = rolesHelper.ListUserRoles(item.Id);
+                    <ul>
+                        @foreach (var role in roleList)
+                            {
+                            <li>@role</li>
+
+                            }
+                    </ul>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-md" })<br />
+                            @if (item.DisplayName != "UnassignedUser" && (User.IsInRole("Admin")) && item.Protected == false)
+                            {
+                                @Html.ActionLink("Roles", "AssignRoles", "ApplicationUsers", new { id = item.Id }, new { @class = "btn btn-info btn-md" })<br />
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id}, new { @class = "btn btn-info btn-md" })<br />
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn-danger btn-xs" })
+                          
+                        }
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+        </table>
+        </div>
+    </div>

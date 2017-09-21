@@ -1,0 +1,105 @@
+﻿@model BugTracker.Models.TicketNotification
+    @using BugTracker.Helpers
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="container">
+    <div class="col-md-offset-3 col-md-6 tile p-15">
+
+        <h2 class="center">View Notification</h2>
+        <div class="col-md-10 p-15">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.NotifyReason)
+                    @Html.HiddenFor(model => model.TicketId)
+                    @Html.HiddenFor(model => model.UserId)
+                    @Html.HiddenFor(model => model.Created)
+                    @Html.HiddenFor(model => model.ChangedBy)
+                    @Html.HiddenFor(model => model.Archived)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NotifyReason, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.NotifyReason, new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+                            @Html.ValidationMessageFor(model => model.NotifyReason, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Ticket", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("TicketId", null, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                            @Html.ValidationMessageFor(model => model.TicketId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("To User", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                            @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Created, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @{ 
+                        var userHelper = new UserHelper();
+                    }
+                    @if (userHelper.AreSameUserId(Model.UserId))
+                    {
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.HasBeenRead, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <div class="checkbox">
+                                    @Html.EditorFor(model => model.HasBeenRead)
+                                    @Html.ValidationMessageFor(model => model.HasBeenRead, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(model => model.HasBeenRead);
+                        if (Model.HasBeenRead)
+                        {
+                            <h5 class="text-warning">Has been read</h5>
+                        }else
+                        {
+                            <h5 class="text-danger">HAS NOT BEEN READ</h5>
+                        }
+                    }
+                 
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

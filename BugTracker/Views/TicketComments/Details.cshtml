@@ -1,0 +1,80 @@
+﻿@model BugTracker.Models.TicketComment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <div class="col-md-offset-3 col-md-6 tile p-15">
+        
+        <h2 class="center">Ticket Comment Details</h2>
+        <div class="col-md-10 p-15">
+            <div>
+
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Ticket.Title)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Ticket.Title)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.User.DisplayName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.User.DisplayName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Comment)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Comment)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Created)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Archived)
+                    </dt>
+
+                    <dd>
+                        @if (Model.Archived)
+                        {
+                            <span class="text-danger">Archived</span>
+                        }
+                        else
+                        {
+                            <span class="text-warning">Active</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <p>
+                @{
+                    var userFlag = ViewBag.UserIndexFlag;
+                    if (userFlag)
+                    {
+                        @Html.ActionLink("To Comment List", "UserIndex", "TicketComments");
+                    }
+                    else
+                    {
+                        @Html.ActionLink("To Comment List", "Index", "TicketComments");
+                    }
+                }
+                @*<a href="@Url.Action("UserIndex", "Tickets")" class="btn btn-info btn-sm">Back To Ticket List</a>
+                <a href="@Url.Action("Index", "TicketComments")" class="btn btn-info btn-sm">Back To Ticket Comments List</a>*@
+            </p>
+        </div>
+        </div>
+    </div>
+

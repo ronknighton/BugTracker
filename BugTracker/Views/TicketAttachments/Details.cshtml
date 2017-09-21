@@ -1,0 +1,124 @@
+﻿@model BugTracker.Models.TicketAttachment
+@using BugTracker.Helpers
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container-fluid">
+    <div class="col-md-offset-3 col-md-6 tile p-15">
+        
+                <h2 class="center">Ticket Attachment Details</h2>
+      
+
+                <div class="col-md-offset-2 col-md-10 p-15">
+
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayName("Attachment Title:")
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Ticket.Title)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayName("Created By:")
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.User.DisplayName)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayName("File Name:")
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.MediaURL)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayName("Description:")
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayName("Created Date:")
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Created)
+                        </dd>
+                        <dt>
+                            @Html.DisplayName("Archived:")
+                        </dt>
+
+                        <dd>
+                            @if (Model.Archived)
+                            {
+                                <span class="text-danger">Archived</span>
+                            }else
+                            {
+                                <span class="text-warning">Active</span>
+                            }
+                           
+                        </dd>
+
+                    </dl>
+                </div>
+          
+        @{ 
+            var fileValidator = new FileUploadValidator();
+            var canDisplayFile = fileValidator.IsDisplayFile(Model.MediaURL);
+            var canDisplayImage = fileValidator.IsImagefile(Model.MediaURL);
+        }
+        @if (canDisplayFile)
+        {   <h3 class="center">Display File</h3>
+        <div class="row col-md-12 custom-overflow p-15">
+            <div class="center" p-15">
+                <object max-width="100%" width="680" height="880" data="@Model.MediaURL"></object>
+            </div>
+        </div>
+        }
+        else if (canDisplayImage)
+        {
+            <h3>Display Image</h3>
+            <div class="container-fluid center p-15">
+                @*<img src="@Model.MediaURL">*@
+                <img class="img-responsive" src="@Model.MediaURL">
+                <div class="p-15">
+                    <a class="btn btn-info btn-sm" href="@Model.MediaURL" download><h3>Click here to download file</h3></a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="center p-15">
+                <a class="btn btn-info btn-sm" href="@Model.MediaURL" download><h3>Click here to download file</h3></a>
+            </div>
+        }
+
+        <p>
+            @*<h4>@Html.ActionLink("Back to Ticket List", "UserIndex", "Tickets")</h4>*@
+            @{
+                var userFlag = ViewBag.UserIndexFlag;
+                if (userFlag)
+                {
+                    @Html.ActionLink("To Attachments List", "UserIndex", "TicketAttachments");
+                }
+                else
+                {
+                    @Html.ActionLink("To Attachments List", "Index", "TicketAttachments");
+                }
+            }
+            @*<a href="@Url.Action("UserIndex", "Tickets")" class="btn btn-info btn-sm">Back To Ticket List</a>
+            @if (User.IsInRole("Admin"))
+            {
+            <a href="@Url.Action("Index", "TicketAttachments")" class="btn btn-info btn-sm">Back To Ticket Attachments List</a>
+            }*@
+        </p>
+    </div>
+</div>

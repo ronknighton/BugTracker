@@ -79,6 +79,13 @@ namespace BugTracker.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        [Required]
+        public string Displayname { get; set; }
     }
 
     public class ResetPasswordViewModel

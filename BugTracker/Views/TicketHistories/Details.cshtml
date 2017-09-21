@@ -1,0 +1,67 @@
+﻿@model BugTracker.Models.TicketHistory
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <div class="col-md-offset-4 col-md-4 tile p-15">
+        <h2 class="center">Ticket History Details</h2>
+
+        <div>
+            
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Ticket.Title)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Ticket.Title)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.FirstName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.User.FirstName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Property)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Property)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.OldValue)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.OldValue)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NewValue)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NewValue)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.DateChanged)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.DateChanged)
+                </dd>
+
+            </dl>
+        </div>
+        </div>
+    </div>
+
+

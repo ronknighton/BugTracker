@@ -1,0 +1,86 @@
+﻿@model IEnumerable<BugTracker.Models.TicketHistory>
+
+@{
+    ViewBag.Title = "Ticket Histories Index";
+}
+<div class="container">
+    <div class="col-md-12">
+
+        <h2>Ticket Histories Index</h2>
+
+        @*<p>
+                @Html.ActionLink("Create New", "Create")
+            </p>*@
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Ticket.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.User.DisplayName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Property)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OldValue)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NewValue)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateChanged)
+                    </th>
+                    <th>@Html.DisplayName("Archived")</th>
+                    <th>@Html.DisplayName("Options")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ticket.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.DisplayName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Property)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OldValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NewValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateChanged)
+                        </td>
+                        <td>
+                            @if (item.Archived)
+                            {
+                                <h5 class="text-danger">Archived</h5>
+                            }
+                            else
+                            {
+                                <h5 class="text-warning">Active</h5>
+                            }
+                        </td>
+                        <td>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                if (!item.Archived) { 
+                          
+                                }
+                                @Html.ActionLink("Details", "Details", new { id = item.Id}, new { @class = "btn btn-info btn-sm" })
+                                @*@Html.ActionLink("Delete", "Delete", new { id = item.Id}, new { @class = "btn btn-info btn-sm" })*@
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+</div>

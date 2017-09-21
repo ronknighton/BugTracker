@@ -1,0 +1,102 @@
+﻿@model BugTracker.Models.Project
+
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="container"> 
+    <div class="col-md-offset-3 col-md-6 tile p-15">
+    
+                <h2>Edit Project</h2>
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                       
+                       
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+                        @Html.HiddenFor(model => model.Archived)
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <!--Current Project Users-->
+                        <h3>Current Users-Select to change:</h3>
+                        @if (ViewBag.projectManagers != null)
+                {
+                            <div class="form-group">
+                                @Html.Label("Current Project Manager", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.DropDownList("projectManagers", null, htmlAttributes: new { @class = "form-control" })
+                                    @*@Html.ValidationMessage("projectDevelopers", "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <h5>No Project Managers assigned.</h5>
+                        }
+                        @if (ViewBag.projectDevelopers != null)
+                {
+                            <div class="form-group">
+                                @Html.Label("Current Developer(s)", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.ListBox("projectDevelopers", null, htmlAttributes: new { @class = "form-control" })
+                                    @*@Html.ValidationMessage("projectDevelopers", "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <h5>No Project Developers assigned.</h5>
+                        }
+                        @if (ViewBag.projectSubmitters != null)
+                {
+                            <div class="form-group">
+                                @Html.Label("Current Submitter(s)", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.ListBox("projectSubmitters", null, htmlAttributes: new { @class = "form-control" })
+                                    @*@Html.ValidationMessage("projectDevelopers", "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <h5>No Project Submitters assigned.</h5>
+                        }
+
+
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Save" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div>
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+            </div>
+   </div>
+ 
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

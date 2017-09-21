@@ -1,0 +1,85 @@
+﻿@model IEnumerable<BugTracker.Models.TicketAttachment>
+@using BugTracker.Helpers
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Ticket Attachments Index</h2>
+
+<div class="container">
+    <div class="col-md-12">
+        @*<p>
+                @Html.ActionLink("Create New", "Create")
+            </p>*@
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Ticket.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.User.DisplayName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MediaURL)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </th>
+                    <th>@Html.DisplayName("Archived")</th>
+                    <th>@Html.DisplayName("Options")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ticket.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.DisplayName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MediaURL)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Created)
+                        </td>
+                        <td>
+                            @if (item.Archived)
+                            {
+                                <h5 class="text-danger">Archived</h5>
+                            }
+                            else
+                            {
+                                <h5 class="text-warning">Active</h5>
+                            }
+                        </td>
+                        <td>
+                            @{ 
+                                var validator = new AccessValidator();
+                                
+                            }
+                            @if (User.IsInRole("Admin") || validator.PMProjectTicket(item.Ticket.Id) || validator.AttachmentOwner(item.Id))
+                            {
+                                if (!item.Archived)
+                                {
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id, flag = ViewBag.UserIndexFlag }, new { @class="btn btn-info btn-sm"}) 
+                                }
+                            @Html.ActionLink("Details", "Details", new { id = item.Id, flag = ViewBag.UserIndexFlag }, new { @class = "btn btn-info btn-sm" }) 
+                            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id, flag = true }, new { @class = "btn btn-info btn-sm" })*@
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+</div>

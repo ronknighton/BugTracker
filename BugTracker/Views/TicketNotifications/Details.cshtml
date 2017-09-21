@@ -1,0 +1,45 @@
+﻿@model BugTracker.Models.TicketNotification
+
+@{
+    ViewBag.Title = "Details";
+}
+<div class="container">
+    <div class="col-md-offset-3 col-md-6 tile p-15">
+        <h2 class="center">Notification Details</h2>
+
+        <div class="col-md-10 p-15">
+
+          
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Ticket.Title)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Ticket.Title)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.User.FirstName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.User.FirstName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NotifyReason)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NotifyReason)
+                </dd>
+
+            </dl>
+        </div>
+        <div class="col-md-12">
+          
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+        </div>
+</div>
